@@ -1,0 +1,168 @@
+# Project Analyzer Agent Configuration
+
+name: project-analyzer
+version: 1.0.0
+description: 自动分析项目结构、识别技术栈、生成结构化文档和Mermaid图表
+
+# 代理接口配置
+agent:
+  # 接口类型
+  type: tool
+  
+  # 执行命令
+  command: node
+  
+  # 命令参数
+  args:
+    - index.js
+  
+  # 工作目录
+  cwd: ${SKILL_DIR}
+  
+  # 环境变量
+  env:
+    - name: NODE_ENV
+      value: production
+    - name: SKILL_DIR
+      value: ${SKILL_DIR}
+    - name: TRAE_HOME
+      value: ${TRAE_HOME}
+
+# 提示配置
+prompts:
+  # 默认提示
+  default:
+    message: "正在分析项目结构..."
+    delay: 1000
+  
+  # 成功提示
+  success:
+    message: "项目分析完成！"
+    delay: 500
+  
+  # 错误提示
+  error:
+    message: "项目分析失败，请检查日志。"
+    delay: 1000
+
+# 显示配置
+display:
+  # 显示名称
+  name: Project Analyzer
+  
+  # 图标
+  icon: 📊
+  
+  # 颜色
+  color: "#4CAF50"
+
+# 输入配置
+input:
+  # 支持的参数
+  parameters:
+    - name: update
+      type: boolean
+      description: 更新已有的文档
+      default: false
+    - name: depth
+      type: number
+      description: 目录扫描深度
+      default: 5
+    - name: ignore
+      type: array
+      description: 忽略的目录和文件
+      default:
+        - node_modules
+        - .git
+        - .trae
+        - dist
+        - build
+
+# 输出配置
+output:
+  # 输出类型
+  type: object
+  
+  # 输出结构
+  structure:
+    - name: status
+      type: string
+      description: 分析状态
+    - name: documents
+      type: array
+      description: 生成的文档列表
+    - name: metadata
+      type: object
+      description: 元数据信息
+    - name: techStack
+      type: array
+      description: 识别的技术栈
+
+# 超时配置
+timeout:
+  # 执行超时时间（毫秒）
+  execution: 300000
+  
+  # 启动超时时间（毫秒）
+  startup: 30000
+
+# 重试配置
+retry:
+  # 最大重试次数
+  maxAttempts: 3
+  
+  # 重试间隔（毫秒）
+  interval: 1000
+
+# 日志配置
+logging:
+  # 日志级别
+  level: info
+  
+  # 日志文件
+  file: ${SKILL_DIR}/logs/agent.log
+
+# 依赖配置
+dependencies:
+  # 系统依赖
+  system:
+    - node
+    - npm
+  
+  # 技能依赖
+  skill:
+    - name: fs-extra
+      version: ^11.0.0
+    - name: glob
+      version: ^10.0.0
+    - name: js-yaml
+      version: ^4.1.0
+    - name: marked
+      version: ^5.0.0
+    - name: mermaid
+      version: ^10.0.0
+
+# 配置文件路径
+config:
+  # 分析模板
+  analysisTemplate: ${SKILL_DIR}/references/analysis-template.md
+  
+  # 技术栈检测器
+  techStackDetectors: ${SKILL_DIR}/references/tech-stack-detectors.md
+  
+  # Mermaid模板
+  mermaidTemplates: ${SKILL_DIR}/references/mermaid-templates.md
+
+# 文档存储配置
+document:
+  # 存储目录
+  storageDir: ${TRAE_HOME}/repowiki
+  
+  # 内容目录
+  contentDir: ${TRAE_HOME}/repowiki/content
+  
+  # 元数据目录
+  metaDir: ${TRAE_HOME}/repowiki/meta
+  
+  # 元数据文件
+  metadataFile: ${TRAE_HOME}/repowiki/meta/repowiki-metadata.json
