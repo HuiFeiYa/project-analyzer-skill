@@ -1,3 +1,9 @@
+---
+name: project-analyzer
+description: 自动分析项目结构、识别技术栈、生成结构化文档和Mermaid图表
+version: 1.0.0
+---
+
 # Project Analyzer Skill
 
 ## 技能信息
